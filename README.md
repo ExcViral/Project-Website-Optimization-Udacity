@@ -2,16 +2,83 @@
 
 This Project is a part of the [Udacity Front-End Web Developer Nanodegree](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) programme.
 
+
+The original github repository for this project can be found [here](https://github.com/udacity/frontend-nanodegree-mobile-portfolio)
+
 The objective of this project was to optimize a provided website so that it achieves a target PageSpeed score of atleast 90 and renders at around 60 frames per second, so that user has a jank free experience.
 
 The project folder contains two main folders:
 * **dist /** _contains the production code_
 * **src /** _contains the source code_
 
-Gulp has been used in this project for optimizing the source code.
-### Getting started
+Gulp has been used in this project for optimizing the source code. If you are unfamiliar to Gulp, I recommend going through [this guide of CSSTricks](https://css-tricks.com/gulp-for-beginners/).
 
-The original github repository for this project can be found [here](https://github.com/udacity/frontend-nanodegree-mobile-portfolio)
+### Getting started
+### How to run the website ?
+##### Run locally using python server
+ 1. Clone or Download this repository to your computer:
+ ```
+ # Run the following commands in Terminal :
+  $ git clone https://github.com/ExcViral/Project-Website-Optimization-Udacity.git
+ ```
+ 2. Navigate to the dist/ directory inside the the project folder and start the python webserver:
+ ```
+ # Run the following commands in Terminal :
+
+ $ cd Project-Website-Optimization-Udacity
+ $ cd dist
+
+ # I am using port 8000 to run the server. To change port number substitute 8000 in the command below with your desired port number.
+ # now start the python webserver using the following command :
+
+ $ python -m http.server 8000
+ ```
+ 3. Now open browser and type the following address in the address bar :
+ ```
+ 127.0.0.1:8000
+ ```
+
+##### Tunneling your website using Ngrok
+ 1. Download Ngrok from the [official website](https://ngrok.com/). Save it inside the project folder.
+ 2. Unzip it inside the folder dist /
+ ```
+  # Open Terminal inside the dist folder and run the following command :
+  $ unzip ../ngrok*
+ ```
+ 3. Now start a local python server using the instructions given above.
+ 4. Now start Ngrok tunnel :
+ ```
+ # Open Terminal inside the dist folder and run the following command :
+$ ./ngrok http 8000
+ ```
+ 5. Now the Ngrok tunnel must have started. Your Terminal will display information about the tunnel. You will find a link in the _Forwarding_ label, copy and paste that link in your browser. If you have done everything correctly, you will see the website load in the browser window.
+
+### How to make changes to website ?
+As mentioned above, the source code is located inside the _src /_ folder and the production code (minified and opimized) is located inside _dist /_ folder.<br>
+Make the changes you want to the files inside the _src /_ folder.<br>
+ To automatically generate production code, you will need to set up Gulp. Follow the instructions below :
+
+##### Setting up Gulp
+  1. Make sure you have _Node Js_ installed on your system. If not, you can find the installation guide [here](https://nodejs.org/en/download/package-manager/).
+  2. Install Gulp (_Skip this step if you have gulp installed on your system_)
+  ```
+  # Run the command below in your Terminal :
+  $ sudo npm install gulp -g
+  ```
+  3. Navigate to the root of project folder and follow these instructions :
+  ```
+  # Open Terminal inside the root of project folder and run the following commands :
+
+  $ npm i
+  $ npm install --save-dev gulp-uglify gulp-minify-css gulp-htmlmin gulp-image-optimization gulp-webserver
+
+  # Type the following command to check if Gulp has been set up properly :
+
+  $ gulp
+
+  # If you have followed the steps correctly, You should now see gulp starting and running specified tasks in the gulpfile.js
+  ```
+  4. Now you have finished setting up Gulp inside the project folder. Whenever you make changes, and you want to generate production code, just open Terminal inside root of project folder and run `$ gulp `, The production code will be automatically generated and saved inside dist folder.
 
 
 #### Part 1: Optimize PageSpeed Insights score for index.html
