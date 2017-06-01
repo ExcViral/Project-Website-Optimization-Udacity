@@ -2,6 +2,8 @@
 
 ### [View this website in browser](https://excviral.github.io/Project-Website-Optimization-Udacity/)
 
+### [Google PageSpeed Insights Test](https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fexcviral.github.io%2FProject-Website-Optimization-Udacity%2F&tab=desktop)
+
 This Project is a part of the [Udacity Front-End Web Developer Nanodegree](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) programme.
 
 
