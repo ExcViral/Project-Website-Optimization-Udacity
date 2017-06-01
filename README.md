@@ -1,5 +1,7 @@
 ## Website Performance Optimization portfolio project
 
+### [View this website in browser](https://excviral.github.io/Project-Website-Optimization-Udacity/)
+
 This Project is a part of the [Udacity Front-End Web Developer Nanodegree](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) programme.
 
 
