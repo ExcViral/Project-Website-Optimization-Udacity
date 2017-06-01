@@ -1,8 +1,9 @@
 ## Website Performance Optimization portfolio project
 
-### [View this website in browser](https://excviral.github.io/Project-Website-Optimization-Udacity/)
+### [Click this link to open website](https://excviral.github.io/Project-Website-Optimization-Udacity/).
 
-### [Google PageSpeed Insights Test](https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fexcviral.github.io%2FProject-Website-Optimization-Udacity%2F&tab=desktop)
+### [Check Google PageSpeed Insights Score](https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fexcviral.github.io%2FProject-Website-Optimization-Udacity%2F&tab=desktop).
+
 
 This Project is a part of the [Udacity Front-End Web Developer Nanodegree](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) programme.
 
@@ -87,48 +88,109 @@ Make the changes you want to the files inside the _src /_ folder.<br>
 
 #### Part 1: Optimize PageSpeed Insights score for index.html
 
-Some useful tips to help you get started:
-
-1. Check out the repository
-1. To inspect the site on your phone, you can run a local server
-
-  ```bash
-  $> cd /path/to/your-project-folder
-  $> python -m SimpleHTTPServer 8080
-  ```
-
-1. Open a browser and visit localhost:8080
-1. Download and install [ngrok](https://ngrok.com/) to the top-level of your project directory to make your local server accessible remotely.
-
-  ``` bash
-  $> cd /path/to/your-project-folder
-  $> ./ngrok http 8080
-  ```
-
-1. Copy the public URL ngrok gives you and try running it through PageSpeed Insights! Optional: [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
-
-Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
+* ###### Successfully achieved a PageSpeed Insights score of **93** for mobile devices and **95** for desktop devices. [Check out on Google PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fexcviral.github.io%2FProject-Website-Optimization-Udacity%2F&tab=desktop)
+* Eliminated render blocking CSS by **embedding** the main CSS stylesheet into index.html and adding media attribute to print stylesheet.
+* Used JavaScript to load google font 'Open Sans' asynchronously.
+* Added **async** attribute to all the scripts, and shifted all the scripts from head to just above closing body tag, so that it won't block parsing.
+* **Optimized** all the images, which saved more than 2 MegaBytes of data.
+* **Minified** HTML, CSS, and JavaScript files using Gulp Tasks, which saved a lot of data.
 
 #### Part 2: Optimize Frames per Second in pizza.html
 
-To optimize views/pizza.html, you will need to modify views/js/main.js until your frames per second rate is 60 fps or higher. You will find instructive comments in main.js.
+* ###### Successfully optimized 'views/js/main.js' and 'views/pizza.html' so that it renders with a consistent frame-rate at 60fps when scrolling.
+* ###### Successfully reduced time to resize pizzas to less than 5 ms. Resize time is shown in the browser developer tools.
+* To achieve the frame rate of 60 fps, I took a few calculations out of the loops they were in, and shifted them to top of the function so they will be assigned only once. I also made the number of pizzas dynamic, it changes with respect to screen height.
+See the comments below for more details.
 
-You might find the FPS Counter/HUD Display useful in Chrome developer tools described here: [Chrome Dev Tools tips-and-tricks](https://developer.chrome.com/devtools/docs/tips-and-tricks).
+```
+function updatePositions() {
+  frame++;
+  window.performance.mark("mark_start_frame");
+  var topPosition = document.body.scrollTop / 1250;
+  var phases = [];
 
-### Optimization Tips and Tricks
-* [Optimizing Performance](https://developers.google.com/web/fundamentals/performance/ "web performance")
-* [Analyzing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "analyzing crp")
-* [Optimizing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "optimize the crp!")
-* [Avoiding Rendering Blocking CSS](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "render blocking css")
-* [Optimizing JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [Measuring with Navigation Timing](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api"). We didn't cover the Navigation Timing API in the first two lessons but it's an incredibly useful tool for automated page profiling. I highly recommend reading.
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">The fewer the downloads, the better</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">Reduce the size of text</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">Optimize images</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP caching</a>
+  for (var i = 0; i < 5; i++) {
+    phases.push(Math.sin(topPosition + i));
+  }
 
-### Customization with Bootstrap
-The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> framework. All custom styles are in `dist/css/portfolio.css` in the portfolio repo.
+  for (var i = 0; i < items.length; i++) {
+    /* moved the Math.sin calc above out of the loop so it just gets called
+     * once, when the function is called */
+    items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
+  }
 
-* <a href="http://getbootstrap.com/css/">Bootstrap's CSS Classes</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap's Components</a>
+  // User Timing API to the rescue again. Seriously, it's worth learning.
+  // Super easy to create custom metrics.
+  window.performance.mark("mark_end_frame");
+  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  if (frame % 10 === 0) {
+    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+    logAverageFrame(timesToUpdatePosition);
+  }
+}
+
+// runs updatePositions on scroll
+window.addEventListener('scroll', updatePositions);
+
+// Generates the sliding pizzas when the page loads.
+document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
+  var s = 256;
+  var pizzasToDisplay = Math.ceil(screen.height / s) * 8
+  console.log(pizzasToDisplay);
+  var movingPizzas = document.getElementById('movingPizzas1');
+
+  /* moved the reference above out of the loop below so it only needs to getAdj
+   * initialized once - at page load. Also replace query selector with
+   * getElementById, which is supposed to be faster. */
+
+  for (var i = 0; i < pizzasToDisplay; i++) {
+    var elem = document.createElement('img');
+    elem.className = 'mover';
+    elem.src = "images/pizza.png";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    movingPizzas.appendChild(elem);
+  }
+
+  /* move the items variable out of the loop above. It's initialized in the
+   * global scope, and then assigned a value once, on page load. */
+
+  items = document.getElementsByClassName('mover');
+  updatePositions();
+});
+
+```
+
+* I made the following changes for reducing time to resize pizzas. See the comments in the code :
+
+```
+/* Eliminated the determineDx function and extracted this function */
+function sizeSwitcher (size) {
+  switch(size) {
+    case "1":
+      return 0.25;
+    case "2":
+      return 0.3333;
+    case "3":
+      return 0.5;
+    default:
+      console.log("bug in sizeSwitcher");
+  }
+}
+
+var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+
+function changePizzaSizes(size) {
+  var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
+
+  for (var i = 0; i < randomPizzas.length; i++) {
+    // var dx = determineDx(randomPizzas[i], size);
+    // var newwidth = (randomPizzas[i].offsetWidth + dx) + 'px';
+    // var newwidth = sizeSwitcher(size) * windowWidth + 'px';
+    randomPizzas[i].style.width = (sizeSwitcher(size) * windowWidth) + 'px';
+  }
+}
+```
