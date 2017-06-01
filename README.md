@@ -19,7 +19,7 @@ Gulp has been used in this project for optimizing the source code. If you are un
  1. Clone or Download this repository to your computer:
  ```
  # Run the following commands in Terminal :
-  $ git clone https://github.com/ExcViral/Project-Website-Optimization-Udacity.git
+ $ git clone https://github.com/ExcViral/Project-Website-Optimization-Udacity.git
  ```
  2. Navigate to the dist/ directory inside the the project folder and start the python webserver:
  ```
